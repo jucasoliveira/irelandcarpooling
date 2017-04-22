@@ -18,25 +18,36 @@ class Driver extends Component{
         open: false,
         origin: '',
         destin:'',
-        date:'',
-        time:'',
+        controlledDate:null,
+        time:null,
       }
     }
 
     onchangeHandler=(e)=>{
-      if(e.target.id == "origin"){
+      if(e.target.id === "origin"){
         this.setState({origin:e.target.value});
-      } else if(e.target.id == "destination"){
+      } else if(e.target.id === "destination"){
         this.setState({destin:e.target.value});
-      } else if(e.target.id == "date"){
-        this.setState({date:e.target.value});
-      } else if(e.target.id == "time"){
-        this.setState({time:e.target.value});
       }
     }
 
+    onchangeDateTime=(event , date)=>{
+        this.setState({controlledDate:date});
+    }
+    onchangeTime=(event , date)=>{
+        this.setState({time:date});
+    }
+
     onSubmitForm=()=>{
-      console.log("Full info origin: " +this.state.origin+ " destination: "+this.state.destin+" date: "+this.state.date+" time: "+this.state.time);
+
+      let payload = {
+        'origin' : this.state.origin,
+        'destination' : this.state.destin,
+        'date' : this.state.controlledDate,
+        'time' : this.state.time
+      };
+
+      console.log(payload);
     }
 
 
@@ -49,7 +60,7 @@ class Driver extends Component{
           <h2>Inform the suffs bellow</h2>
         </div>
         <div>
-        <form>
+        <form onSubmit={this.onSubmitForm}>
           <TextField
             hintText="Define your origin"
             floatingLabelText="Where are you?"
@@ -66,9 +77,10 @@ class Driver extends Component{
             onChange={this.onchangeHandler}
           />
           <p/>
-          <DatePicker hintText="Origin date" / ><TimePicker hintText="12hr Format"/>
+          <DatePicker hintText="Origin date" value={this.state.controlledDate} id="date" onChange={this.onchangeDateTime}/>
+          <TimePicker hintText="12hr Format" value={this.state.time} id="time" onChange={this.onchangeTime}/>
           <p/>
-          <FlatButton label="GO!" fullWidth={true} />
+          <FlatButton label="GO!" fullWidth={true} type="submit"/>
         </form>
        </div>
       </div>
