@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import logo from '../../images/carpoolinglogo.png';
 
-
 class Driver extends Component{
     render() {
     return (
