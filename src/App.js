@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from '../images/carpoolinglogo.png';
 import driverimage from '../images/schools.svg';
 import poolerimage from '../images/poolinG.png';
-import './App.css';
+import './styles/App.css';
 //import Login from './modules/login';
 import { Link } from 'react-router-dom';
 
