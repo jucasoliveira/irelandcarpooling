@@ -7,8 +7,17 @@ import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import TimePicker from 'material-ui/TimePicker';
+import Toggle from 'material-ui/Toggle';
 
-
+const styles = {
+  block: {
+    maxWidth: 250,
+  },
+  toggle: {
+    marginBottom: 16,
+    margin: '0 auto',
+  },
+};
 
 class Driver extends Component{
     constructor(props: any) {
@@ -20,6 +29,8 @@ class Driver extends Component{
         destin:'',
         controlledDate:null,
         time:null,
+        Toggled:false,
+        Disabled:true,
       }
     }
 
@@ -41,13 +52,17 @@ class Driver extends Component{
     onSubmitForm=()=>{
 
       let payload = {
-        'origin' : this.state.origin,
-        'destination' : this.state.destin,
-        'date' : this.state.controlledDate,
-        'time' : this.state.time
+        'origin' : `${this.state.origin}`,
+        'destination' : `${this.state.destin}`,
+        'date' : `${this.state.controlledDate}`,
+        'time' : `${this.state.time}`
       };
 
       console.log(payload);
+    }
+
+    openReturn=()=>{
+      this.setState({Toggled: !this.state.Toggled , Disabled : !this.state.Disabled});
     }
 
 
@@ -79,6 +94,18 @@ class Driver extends Component{
           <p/>
           <DatePicker hintText="Origin date" value={this.state.controlledDate} id="date" onChange={this.onchangeDateTime}/>
           <TimePicker hintText="12hr Format" value={this.state.time} id="time" onChange={this.onchangeTime}/>
+          <p/>
+          <div style={styles.block}>
+            <Toggle
+              label="Add return trip?"
+              style={styles.toggle}
+              defaultToggled={this.state.Toggled}
+              toggle={this.state.Toggled}
+              onToggle={this.openReturn}
+            />
+            </div>
+            <DatePicker hintText="Origin date" value={this.state.controlledDate} id="dateReturn" onChange={'this.onchangeDateTime'} disabled={this.state.Disabled}/>
+            <TimePicker hintText="12hr Format" value={this.state.time} id="timeReturn" onChange={'this.onchangeTime'} disabled={this.state.Disabled}/>
           <p/>
           <FlatButton label="GO!" fullWidth={true} type="submit"/>
         </form>
