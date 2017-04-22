@@ -40,6 +40,8 @@ class Driver extends Component{
 
     onSubmitForm=()=>{
 
+        console.log('igor');
+
       let payload = {
         'origin' : this.state.origin,
         'destination' : this.state.destin,
@@ -80,7 +82,7 @@ class Driver extends Component{
           <DatePicker hintText="Origin date" value={this.state.controlledDate} id="date" onChange={this.onchangeDateTime}/>
           <TimePicker hintText="12hr Format" value={this.state.time} id="time" onChange={this.onchangeTime}/>
           <p/>
-          <FlatButton label="GO!" fullWidth={true} type="submit"/>
+          <FlatButton label="GO!"  type="submit"/>
         </form>
        </div>
       </div>
