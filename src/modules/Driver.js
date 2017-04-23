@@ -5,10 +5,11 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+//
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
 import firebase from '../backend/Firebase';
+import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places';
 
 const styles = {
   block: {
@@ -26,7 +27,7 @@ var UCRef = database.ref("/drivers");
 
 class Driver extends Component{
     constructor(props: any) {
-      injectTapEventPlugin();
+      //injectTapEventPlugin();
       super(props);
       this.state={
         open: false,
@@ -42,17 +43,13 @@ class Driver extends Component{
 
       }
     }
-/*
-    componentDidMount = () => {
-        UCRef.on('value', snapshot => {
-          this.setState({driver: snapshot.val()});
-        });
-    };
-*/
+
     onchangeHandler=(e)=>{
       if(e.target.id === "origin"){
+        this.initAutoComplete(e.target.id);
         this.setState({origin:e.target.value});
       } else if(e.target.id === "destination"){
+        this.initAutoComplete(e.target.id);
         this.setState({destin:e.target.value});
       }
     }
@@ -108,6 +105,38 @@ class Driver extends Component{
       }
     }
 
+    initAutoComplete=(event)=>{
+      const input = document.getElementById(event)
+      const options = {
+        componentRestrictions: {country: 'ie'},
+        types: ['geocode']
+      }
+      const geoAutocomplete = new window.google.maps.places.Autocomplete((input), options)
+      geoAutocomplete.addListener('place_changed', () => {
+        const selectedPlace = geoAutocomplete.getPlace()
+        const componentForm = {
+          street_number: 'short_name',
+          route: 'long_name',
+          locality: 'long_name',
+          administrative_area_level_1: 'short_name',
+          country: 'long_name',
+          postal_code: 'short_name'
+        }
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        let selectedSuggest = {}
+        for (let addressComponent of selectedPlace.address_components) {
+          const addressType = addressComponent.types[0]
+          if (componentForm[addressType]) {
+            selectedSuggest[addressType] = addressComponent[componentForm[addressType]]
+          }
+        }
+        // input.value = selectedPlace.name // Code injection risk (check doc)
+        input.value = `${selectedSuggest.locality}, ${selectedSuggest.administrative_area_level_1}`
+        //this.props.onChange(selectedSuggest)
+      })
+    }
+
 
     render() {
     return (
@@ -125,6 +154,7 @@ class Driver extends Component{
             value={this.state.origin}
             id="origin"
             onChange={this.onchangeHandler}
+            placeholder=''
           />
           <p/>
           <TextField
