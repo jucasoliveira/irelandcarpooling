@@ -61,6 +61,17 @@ class Driver extends Component{
     }
 
     onSubmitForm=()=>{
+
+        console.log('igor');
+
+      let payload = {
+        'origin' : `${this.state.origin}`,
+        'destination' : `${this.state.destin}`,
+        'date' : `${this.state.controlledDate}`,
+        'time' : `${this.state.time}`
+      };
+
+    onSubmitForm=()=>{
       let payload;
       if (this.state.Disabled) {
         payload = {
@@ -123,6 +134,7 @@ class Driver extends Component{
           <DatePicker hintText="Origin date" value={this.state.controlledDate} id="date" onChange={this.onchangeDateTime}/>
           <TimePicker hintText="12hr Format" value={this.state.time} id="time" onChange={this.onchangeTime}/>
           <p/>
+
           <div style={styles.block}>
             <Toggle
               label="Add return trip?"
