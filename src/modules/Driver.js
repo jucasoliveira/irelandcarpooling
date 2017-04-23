@@ -1,6 +1,6 @@
 // modules/Driver.js
 import React, { Component } from 'react';
-import logo from '../../images/carpoolinglogo.png';
+import logo from '../../images/logo.svg';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,6 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
+//import firebase from '../backend/Firebase';
 
 const styles = {
   block: {
@@ -31,6 +32,9 @@ class Driver extends Component{
         time:null,
         Toggled:false,
         Disabled:true,
+        timeReturn:null,
+        controlledDateReturn:null
+
       }
     }
 
@@ -49,20 +53,44 @@ class Driver extends Component{
         this.setState({time:date});
     }
 
+    onchangeDateTimeDisabled=(event , date)=>{
+        this.setState({controlledDateReturn:date});
+    }
+    onchangeTimeDisabled=(event , date)=>{
+        this.setState({timeReturn:date});
+    }
+
     onSubmitForm=()=>{
-
-      let payload = {
-        'origin' : `${this.state.origin}`,
-        'destination' : `${this.state.destin}`,
-        'date' : `${this.state.controlledDate}`,
-        'time' : `${this.state.time}`
-      };
-
+      let payload;
+      if (this.state.Disabled) {
+        payload = {
+          'driver' : {
+            'origin' : `${this.state.origin}`,
+            'destination' : `${this.state.destin}`,
+            'date' : `${this.state.controlledDate}`,
+            'time' : `${this.state.time}`
+          }
+        };
+      } else {
+        payload = {
+          'driver' : {
+            'origin' : `${this.state.origin}`,
+            'destination' : `${this.state.destin}`,
+            'date' : `${this.state.controlledDate}`,
+            'time' : `${this.state.time}`,
+            'dateReturn' : `${this.state.controlledDateReturn}`,
+            'timeReturn' : `${this.state.timeReturn}`
+          }
+        };
+      }
       console.log(payload);
     }
 
     openReturn=()=>{
       this.setState({Toggled: !this.state.Toggled , Disabled : !this.state.Disabled});
+      if (!this.state.Disabled) {
+        this.setState({controlledDateReturn : null, timeReturn : null})
+      }
     }
 
 
@@ -72,7 +100,7 @@ class Driver extends Component{
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Inform the suffs bellow</h2>
+          <h2>Show where you are going for everyone</h2>
         </div>
         <div>
         <form onSubmit={this.onSubmitForm}>
@@ -85,7 +113,7 @@ class Driver extends Component{
           />
           <p/>
           <TextField
-            hintText="Define your detination"
+            hintText="Define your destination"
             floatingLabelText="Where you're going?"
             value={this.state.destin}
             id="destination"
@@ -104,10 +132,10 @@ class Driver extends Component{
               onToggle={this.openReturn}
             />
             </div>
-            <DatePicker hintText="Origin date" value={this.state.controlledDate} id="dateReturn" onChange={'this.onchangeDateTime'} disabled={this.state.Disabled}/>
-            <TimePicker hintText="12hr Format" value={this.state.time} id="timeReturn" onChange={'this.onchangeTime'} disabled={this.state.Disabled}/>
+            <DatePicker hintText="Origin date" value={this.state.controlledDateReturn} id="dateReturn" onChange={this.onchangeDateTimeDisabled} disabled={this.state.Disabled}/>
+            <TimePicker hintText="12hr Format" value={this.state.timeReturn} id="timeReturn" onChange={this.onchangeTimeDisabled} disabled={this.state.Disabled}/>
           <p/>
-          <FlatButton label="GO!" fullWidth={true} type="submit"/>
+          <FlatButton label="GO!" type="submit"/>
         </form>
        </div>
       </div>
