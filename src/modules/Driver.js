@@ -8,7 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
-//import firebase from '../backend/Firebase';
+import firebase from '../backend/Firebase';
 
 const styles = {
   block: {
@@ -19,6 +19,10 @@ const styles = {
     margin: '0 auto',
   },
 };
+
+// Get a reference to the database service
+var database = firebase.database();
+var UCRef = database.ref("/drivers");
 
 class Driver extends Component{
     constructor(props: any) {
@@ -33,11 +37,18 @@ class Driver extends Component{
         Toggled:false,
         Disabled:true,
         timeReturn:null,
-        controlledDateReturn:null
+        controlledDateReturn:null,
+        driver : [],
 
       }
     }
-
+/*
+    componentDidMount = () => {
+        UCRef.on('value', snapshot => {
+          this.setState({driver: snapshot.val()});
+        });
+    };
+*/
     onchangeHandler=(e)=>{
       if(e.target.id === "origin"){
         this.setState({origin:e.target.value});
@@ -65,15 +76,18 @@ class Driver extends Component{
       if (this.state.Disabled) {
         payload = {
           'driver' : {
+            'name' : 'Brian',
             'origin' : `${this.state.origin}`,
             'destination' : `${this.state.destin}`,
             'date' : `${this.state.controlledDate}`,
             'time' : `${this.state.time}`
           }
         };
+        UCRef.push(payload);
       } else {
         payload = {
           'driver' : {
+            'name' : 'Brian',
             'origin' : `${this.state.origin}`,
             'destination' : `${this.state.destin}`,
             'date' : `${this.state.controlledDate}`,
@@ -82,6 +96,7 @@ class Driver extends Component{
             'timeReturn' : `${this.state.timeReturn}`
           }
         };
+        UCRef.push(payload);
       }
       console.log(payload);
     }
