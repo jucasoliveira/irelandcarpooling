@@ -61,17 +61,6 @@ class Driver extends Component{
     }
 
     onSubmitForm=()=>{
-
-        console.log('igor');
-
-      let payload = {
-        'origin' : `${this.state.origin}`,
-        'destination' : `${this.state.destin}`,
-        'date' : `${this.state.controlledDate}`,
-        'time' : `${this.state.time}`
-      };
-
-    onSubmitForm=()=>{
       let payload;
       if (this.state.Disabled) {
         payload = {
