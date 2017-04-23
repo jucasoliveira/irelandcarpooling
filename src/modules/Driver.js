@@ -5,7 +5,6 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
-//
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
 import firebase from '../backend/Firebase';
@@ -39,8 +38,6 @@ class Driver extends Component{
         Disabled:true,
         timeReturn:null,
         controlledDateReturn:null,
-        driver : [],
-
       }
     }
 
@@ -132,8 +129,19 @@ class Driver extends Component{
           }
         }
         // input.value = selectedPlace.name // Code injection risk (check doc)
-        input.value = `${selectedSuggest.locality}, ${selectedSuggest.administrative_area_level_1}`
-        //this.props.onChange(selectedSuggest)
+        if(selectedSuggest.locality === undefined){
+          input.value = `${selectedSuggest.administrative_area_level_1}, ${selectedSuggest.country}`;
+        }else{
+          input.value = `${selectedSuggest.locality}, ${selectedSuggest.administrative_area_level_1}`;
+        }
+
+        if(event === "origin"){
+          this.setState({origin:input.value});
+        } else {
+          this.setState({destin:input.value});
+        }
+
+
       })
     }
 
@@ -144,7 +152,7 @@ class Driver extends Component{
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Show where you are going for everyone</h2>
+          <h2>Tell everyone about your trip</h2>
         </div>
         <div>
         <form onSubmit={this.onSubmitForm}>
@@ -165,8 +173,13 @@ class Driver extends Component{
             onChange={this.onchangeHandler}
           />
           <p/>
-          <DatePicker hintText="Origin date" value={this.state.controlledDate} id="date" onChange={this.onchangeDateTime}/>
-          <TimePicker hintText="12hr Format" value={this.state.time} id="time" onChange={this.onchangeTime}/>
+          <DatePicker
+            hintText="Origin date"
+            value={this.state.controlledDate}
+            id="date"
+            onChange={this.onchangeDateTime}
+            autoOk={true}/>
+          <TimePicker hintText="Origin time" value={this.state.time} id="time" onChange={this.onchangeTime}/>
           <p/>
 
           <div style={styles.block}>
@@ -178,8 +191,8 @@ class Driver extends Component{
               onToggle={this.openReturn}
             />
             </div>
-            <DatePicker hintText="Origin date" value={this.state.controlledDateReturn} id="dateReturn" onChange={this.onchangeDateTimeDisabled} disabled={this.state.Disabled}/>
-            <TimePicker hintText="12hr Format" value={this.state.timeReturn} id="timeReturn" onChange={this.onchangeTimeDisabled} disabled={this.state.Disabled}/>
+            <DatePicker hintText="Return date" value={this.state.controlledDateReturn} id="dateReturn" onChange={this.onchangeDateTimeDisabled} disabled={this.state.Disabled}/>
+            <TimePicker hintText="Return time" value={this.state.timeReturn} id="timeReturn" onChange={this.onchangeTimeDisabled} disabled={this.state.Disabled}/>
           <p/>
           <FlatButton label="GO!" type="submit"/>
         </form>
