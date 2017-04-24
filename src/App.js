@@ -5,15 +5,13 @@ import poolerimage from '../images/hailo.png';
 import './styles/App.css';
 //import Login from './modules/login';
 import { Link } from 'react-router-dom';
+import Header from './modules/HeaderComponent';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to IrelandPooling</h2>
-        </div>
+        <Header/>
         <div>
           <h1>Please define who are you :)</h1>
           <ul role="nav">
