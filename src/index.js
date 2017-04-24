@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Driver from './modules/Driver';
 import Pooler from './modules/Pooler';
+import List from './modules/List';
 
 ReactDOM.render(
   (<HashRouter>
@@ -15,6 +16,7 @@ ReactDOM.render(
         <Route exact path="/" component={App}/>
         <Route path="/pooler" component={Pooler}/>
         <Route path="/driver" component={Driver}/>
+        <Route path="/list" component={List}/>
     </div>
   </ HashRouter>),
   document.getElementById('root')
