@@ -83,18 +83,15 @@ class FormComponent extends Component{
       } else {
         if (this.state.Disabled) {
           payload = {
-            'driver' : {
               'name' : 'Brian',
               'origin' : `${this.state.origin}`,
               'destination' : `${this.state.destin}`,
               'date' : `${this.state.controlledDate}`,
               'time' : `${this.state.time}`
-            }
           };
           UCRef.push(payload);
         } else {
           payload = {
-            'driver' : {
               'name' : 'Brian',
               'origin' : `${this.state.origin}`,
               'destination' : `${this.state.destin}`,
@@ -102,7 +99,6 @@ class FormComponent extends Component{
               'time' : `${this.state.time}`,
               'dateReturn' : `${this.state.controlledDateReturn}`,
               'timeReturn' : `${this.state.timeReturn}`
-            }
           };
           UCRef.push(payload);
         }
