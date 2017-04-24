@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import logo from '../../images/logo.svg';
 import FormComponent from './FormComponent';
-
+import Header from './HeaderComponent';
 const styles = {
   block: {
     maxWidth: 250,
@@ -23,14 +23,11 @@ class Driver extends Component{
       super(props);
     }
 
-
     render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Tell everyone about your trip</h2>
-        </div>
+        <Header/>
+        <h2>Driver</h2>
         <div>
         <FormComponent/>
        </div>

@@ -92,7 +92,17 @@ class FormComponent extends Component{
         };
         UCRef.push(payload);
       }
-      console.log(payload);
+      this.setState({
+        open: false,
+        origin: '',
+        destin:'',
+        controlledDate:null,
+        time:null,
+        Toggled:false,
+        Disabled:true,
+        timeReturn:null,
+        controlledDateReturn:null,
+      });
     }
 
     openReturn=()=>{
@@ -166,6 +176,7 @@ class FormComponent extends Component{
             value={this.state.destin}
             id="destination"
             onChange={this.onchangeHandler}
+            placeholder=''
           />
           <p/>
           <DatePicker

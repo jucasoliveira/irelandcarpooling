@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import logo from '../../images/logo.svg';
 import FormComponent from './FormComponent';
-
+import Header from './HeaderComponent';
 
 class Pooler extends Component{
 
@@ -18,10 +18,8 @@ class Pooler extends Component{
     render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Tell everyone about your trip</h2>
-        </div>
+          <Header/>
+          <h2>Passenger</h2>
         <div>
        </div>
       </div>
