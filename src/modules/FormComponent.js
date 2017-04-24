@@ -1,6 +1,5 @@
 // modules/FormComponent.js
 import React, { Component } from 'react';
-import logo from '../../images/logo.svg';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -26,7 +25,6 @@ var database = firebase.database();
 
 class FormComponent extends Component{
     constructor(props: any) {
-      //injectTapEventPlugin();
       super(props);
       this.state={
         open: false,
@@ -39,6 +37,11 @@ class FormComponent extends Component{
         timeReturn:null,
         controlledDateReturn:null,
         databaseType : this.props.databaseType,
+        originfieldRequired : '',
+        destinfieldRequired : '',
+        controlledDateRequired : '',
+        timeDateRequired : '',
+
       }
     }
 
@@ -69,42 +72,56 @@ class FormComponent extends Component{
     onSubmitForm=()=>{
       let payload;
       var UCRef = database.ref(this.state.databaseType);
-      if (this.state.Disabled) {
-        payload = {
-          'driver' : {
-            'name' : 'Brian',
-            'origin' : `${this.state.origin}`,
-            'destination' : `${this.state.destin}`,
-            'date' : `${this.state.controlledDate}`,
-            'time' : `${this.state.time}`
-          }
-        };
-        UCRef.push(payload);
+      if (this.state.origin === "") {
+        this.setState({originfieldRequired : 'This field is Required'});
+      } else if(this.state.destin === "") {
+        this.setState({destinfieldRequired : 'This field is Required'});
+      } else if (this.state.controlledDate === null) {
+        this.setState({controlledDateRequired : 'This field is Required'});
+      } else if (this.state.time === null) {
+          this.setState({timeDateRequired : 'This field is Required'});
       } else {
-        payload = {
-          'driver' : {
-            'name' : 'Brian',
-            'origin' : `${this.state.origin}`,
-            'destination' : `${this.state.destin}`,
-            'date' : `${this.state.controlledDate}`,
-            'time' : `${this.state.time}`,
-            'dateReturn' : `${this.state.controlledDateReturn}`,
-            'timeReturn' : `${this.state.timeReturn}`
-          }
-        };
-        UCRef.push(payload);
+        if (this.state.Disabled) {
+          payload = {
+            'driver' : {
+              'name' : 'Brian',
+              'origin' : `${this.state.origin}`,
+              'destination' : `${this.state.destin}`,
+              'date' : `${this.state.controlledDate}`,
+              'time' : `${this.state.time}`
+            }
+          };
+          UCRef.push(payload);
+        } else {
+          payload = {
+            'driver' : {
+              'name' : 'Brian',
+              'origin' : `${this.state.origin}`,
+              'destination' : `${this.state.destin}`,
+              'date' : `${this.state.controlledDate}`,
+              'time' : `${this.state.time}`,
+              'dateReturn' : `${this.state.controlledDateReturn}`,
+              'timeReturn' : `${this.state.timeReturn}`
+            }
+          };
+          UCRef.push(payload);
+        }
+        this.setState({
+          open: false,
+          origin: '',
+          destin:'',
+          controlledDate:null,
+          time:null,
+          Toggled:false,
+          Disabled:true,
+          timeReturn:null,
+          controlledDateReturn:null,
+          originfieldRequired : '',
+          destinfieldRequired : '',
+          controlledDateRequired : '',
+          timeDateRequired : '',
+        });
       }
-      this.setState({
-        open: false,
-        origin: '',
-        destin:'',
-        controlledDate:null,
-        time:null,
-        Toggled:false,
-        Disabled:true,
-        timeReturn:null,
-        controlledDateReturn:null,
-      });
     }
 
     openReturn=()=>{
@@ -161,7 +178,6 @@ class FormComponent extends Component{
     render() {
     return (
       <MuiThemeProvider>
-
         <form onSubmit={this.onSubmitForm}>
           <TextField
             hintText="Define your origin"
@@ -170,6 +186,7 @@ class FormComponent extends Component{
             id="origin"
             onChange={this.onchangeHandler}
             placeholder=''
+            errorText={this.state.originfieldRequired}
           />
           <p/>
           <TextField
@@ -179,6 +196,7 @@ class FormComponent extends Component{
             id="destination"
             onChange={this.onchangeHandler}
             placeholder=''
+            errorText ={this.state.destinfieldRequired}
           />
           <p/>
           <DatePicker
