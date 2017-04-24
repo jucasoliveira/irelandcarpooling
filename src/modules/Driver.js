@@ -29,7 +29,7 @@ class Driver extends Component{
         <Header/>
         <h2>Driver</h2>
         <div>
-        <FormComponent/>
+        <FormComponent databaseType="/drivers"/>
        </div>
       </div>
     );
