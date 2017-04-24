@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import logo from '../../images/logo.svg';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
@@ -22,7 +22,7 @@ const styles = {
 
 // Get a reference to the database service
 var database = firebase.database();
-var UCRef = database.ref("/drivers");
+
 
 class FormComponent extends Component{
     constructor(props: any) {
@@ -38,6 +38,7 @@ class FormComponent extends Component{
         Disabled:true,
         timeReturn:null,
         controlledDateReturn:null,
+        databaseType : this.props.databaseType,
       }
     }
 
@@ -67,6 +68,7 @@ class FormComponent extends Component{
 
     onSubmitForm=()=>{
       let payload;
+      var UCRef = database.ref(this.state.databaseType);
       if (this.state.Disabled) {
         payload = {
           'driver' : {
@@ -201,7 +203,7 @@ class FormComponent extends Component{
             <DatePicker hintText="Return date" value={this.state.controlledDateReturn} id="dateReturn" onChange={this.onchangeDateTimeDisabled} disabled={this.state.Disabled}/>
             <TimePicker hintText="Return time" value={this.state.timeReturn} id="timeReturn" onChange={this.onchangeTimeDisabled} disabled={this.state.Disabled}/>
           <p/>
-          <FlatButton label="GO!" type="submit"/>
+          <RaisedButton label="GO" onTouchTap={this.handleOpen} type="submit"/>
         </form>
       </MuiThemeProvider>
     );

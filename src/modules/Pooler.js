@@ -21,6 +21,7 @@ class Pooler extends Component{
           <Header/>
           <h2>Passenger</h2>
         <div>
+        <FormComponent databaseType="/passengers"/>
        </div>
       </div>
     );
