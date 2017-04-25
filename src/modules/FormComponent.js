@@ -8,6 +8,7 @@ import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
 import firebase from '../backend/Firebase';
 import { Redirect } from 'react-router-dom';
+import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places';
 
 const styles = {
   block: {
