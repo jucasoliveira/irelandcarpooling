@@ -7,6 +7,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
 import firebase from '../backend/Firebase';
+import { Redirect } from 'react-router-dom';
 import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places';
 
 const styles = {
@@ -41,6 +42,7 @@ class FormComponent extends Component{
         destinfieldRequired : '',
         controlledDateRequired : '',
         timeDateRequired : '',
+        redirect: false,
 
       }
     }
@@ -58,8 +60,8 @@ class FormComponent extends Component{
     onchangeDateTime=(event , date)=>{
         this.setState({controlledDate:date});
     }
-    onchangeTime=(event , date)=>{
-        this.setState({time:date});
+    onchangeTime=(event , time)=>{
+        this.setState({time:time});
     }
 
     onchangeDateTimeDisabled=(event , date)=>{
@@ -72,6 +74,7 @@ class FormComponent extends Component{
     onSubmitForm=()=>{
       let payload;
       var UCRef = database.ref(this.state.databaseType);
+
       if (this.state.origin === "") {
         this.setState({originfieldRequired : 'This field is Required'});
       } else if(this.state.destin === "") {
@@ -81,24 +84,28 @@ class FormComponent extends Component{
       } else if (this.state.time === null) {
           this.setState({timeDateRequired : 'This field is Required'});
       } else {
+        var logDate =  this.state.controlledDate.getDate() + "/" + (this.state.controlledDate.getMonth() + 1) + "/" + this.state.controlledDate.getFullYear();
+        var logTime = this.state.time.getHours() + ":" + this.state.time.getMinutes();
         if (this.state.Disabled) {
           payload = {
               'name' : 'Brian',
               'origin' : `${this.state.origin}`,
               'destination' : `${this.state.destin}`,
-              'date' : `${this.state.controlledDate}`,
-              'time' : `${this.state.time}`
+              'date' : logDate,
+              'time' : logTime
           };
           UCRef.push(payload);
         } else {
+          var logDateReturn =  this.state.controlledDateReturn.getDate() + "/" + (this.state.controlledDateReturn.getMonth() + 1) + "/" + this.state.controlledDateReturn.getFullYear();
+          var logTimeReturn = this.state.timeReturn.getHours() + ":" + this.state.timeReturn.getMinutes();
           payload = {
               'name' : 'Brian',
               'origin' : `${this.state.origin}`,
               'destination' : `${this.state.destin}`,
-              'date' : `${this.state.controlledDate}`,
-              'time' : `${this.state.time}`,
-              'dateReturn' : `${this.state.controlledDateReturn}`,
-              'timeReturn' : `${this.state.timeReturn}`
+              'date' : logDate,
+              'time' : logTime,
+              'dateReturn' : logDateReturn,
+              'timeReturn' : logTimeReturn
           };
           UCRef.push(payload);
         }
@@ -172,6 +179,13 @@ class FormComponent extends Component{
 
 
     render() {
+
+    const { redirect } = this.state;
+
+     if (redirect) {
+       <Redirect push to="/list" />
+     }
+
     return (
       <MuiThemeProvider>
         <form onSubmit={this.onSubmitForm}>
@@ -217,7 +231,8 @@ class FormComponent extends Component{
             <DatePicker hintText="Return date" value={this.state.controlledDateReturn} id="dateReturn" onChange={this.onchangeDateTimeDisabled} disabled={this.state.Disabled}/>
             <TimePicker hintText="Return time" value={this.state.timeReturn} id="timeReturn" onChange={this.onchangeTimeDisabled} disabled={this.state.Disabled}/>
           <p/>
-          <RaisedButton label="GO" onTouchTap={this.handleOpen} type="submit"/>
+          <RaisedButton label="GO" onTouchTap={this.handleOpen} type="submit">
+          </RaisedButton>
         </form>
       </MuiThemeProvider>
     );

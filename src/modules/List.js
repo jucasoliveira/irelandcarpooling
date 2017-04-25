@@ -3,12 +3,20 @@ import firebase from '../backend/Firebase';
 import Header from './HeaderComponent';
 import {Card, CardActions, CardHeader, CardText, CardTitle} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 import Paper from 'material-ui/Paper';
+import Chip from 'material-ui/Chip'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // Get a reference to the database service
 var database = firebase.database();
-var UCRef = database.ref("/drivers");
+const style = {
+  height: 50,
+  width: 150,
+  margin: 10,
+  textAlign: 'center',
+  display: 'inline-block',
+};
 
 const cardStyle = {
   margin:20,
@@ -16,6 +24,9 @@ const cardStyle = {
   textAlign: 'left',
   align: 'center',
   padding: '20px',
+  chip: {
+    margin: 10,
+  },
 };
 
 const buttonStyle ={
@@ -28,10 +39,12 @@ class List extends Component {
   this.state={
     name:[],
     open: false,
+    databaseType : this.props.databaseType,
     }
   };
 
   componentDidMount = () => {
+    var UCRef = database.ref(this.state.databaseType);
     UCRef.on('value', snapshot => {
       this.setState({name: snapshot.val()});
     });
@@ -44,25 +57,36 @@ class List extends Component {
        obj._key = key;
        return obj;
     });
+    console.log(dataWithKeys);
 
     const listItems = dataWithKeys.map((list) =>
       <MuiThemeProvider>
         <Card style={cardStyle}>
           <CardHeader
             title={list.name}
-            avatar="../../images/jsa-128.jpeg"
+            subtitle="The best driver"
+            avatar=""
           />
           <CardText>
             <CardTitle title="Origin" subtitle={list.origin} />
             <CardTitle title="Destination" subtitle={list.destination} />
           </CardText>
+          <Paper style={style} zDepth={1}>
+          <p>{list.date}  {list.time}</p>
+          </Paper>
+          { list.dateReturn ? (<p>
+              <Divider />
+              <Chip style={cardStyle.chip}>This ride has returning</Chip>
+              <Paper style={style} zDepth={1}>
+                <p>{list.dateReturn}  {list.timeReturn}</p>
+              </Paper>
+            </p>) : (<p/>)}
           <CardActions>
             <RaisedButton label="Contact!" style={buttonStyle}/>
           </CardActions>
         </Card>
       </MuiThemeProvider>
     )
-    console.log(dataWithKeys);
 
     return (
       <div className="App">
