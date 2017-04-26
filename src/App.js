@@ -7,6 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Link } from 'react-router-dom';
 import Header from './modules/HeaderComponent';
 import Paper from 'material-ui/Paper';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const style = {
   height: 100,
@@ -18,8 +19,26 @@ const style = {
 };
 
 class App extends Component {
+  constructor() {
+    super();
 
+    this.state = {
+      loading: true
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.setState({ loading: false }), 1500);
+
+  }
   render() {
+    const loadpage = [<MuiThemeProvider><CircularProgress/></MuiThemeProvider>]
+    const { loading } = this.state;
+
+    if(loading) {
+      return (<div className="App-loading">{loadpage}</div>); // render null when app is not ready
+    }
+
     return (
       <MuiThemeProvider>
       <div className="App">
